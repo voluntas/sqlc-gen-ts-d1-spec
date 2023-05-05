@@ -7,7 +7,7 @@
         "wasm":
           {
             "url": "file://.sqlc-plugin/sqlc-gen-typescript-d1.wasm",
-            "sha256": "feb9847ff6d87358d86e728dad103888ce8fc50c34fd040db21b332e6e181993",
+            "sha256": "10b97c530eeea82daf6d3c5547427d908e6da7c0642a00c94f808db9f306b679",
           },
       },
     ],
