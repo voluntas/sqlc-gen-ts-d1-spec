@@ -115,102 +115,177 @@ WHERE id = @id:text;
 - batch をどうするか
   - D1.batch があるので実現は可能そう
 
-### querier.ts ?
+### querier.ts
+
+これは実際に生成されたコードに対してコメントを付与しています。
 
 ```js
+//
+import {D1Database, D1Result} from "@cloudflare/workers-types/2022-11-30"
 
-// :one の部分はコードから見たいのでここのコメントは欲しい
 const getAccountQuery = `-- name: GetAccount :one
-SELECT * FROM account
-WHERE id = $1 LIMIT 1;`;
+SELECT pk, id, display_name, email
+FROM account
+WHERE id = ?1`;
 
-// 引数が一つでも params ありで
-// query_parameter_limit: 0 前提
 export type GetAccountParams = {
-  id: string,
+  id: string;
 };
 
 export type GetAccountRow = {
-    pk: bigint;
-    id: string;
-    displayName: string;
-    // null が入ってくる場合は null | string になる
-    email: null | string;
-}
+  pk: bigint;
+  id: string;
+  displayName: string;
+  email: string | null;
+};
+
+type RawGetAccountRow = {
+  pk: bigint;
+  id: string;
+  display_name: string;
+  email: string | null;
+};
 
 export async function getAccount(
   d1: D1Database,
-  args: GetAuthorParams
+  args: GetAccountParams
 ): Promise<GetAccountRow | null> {
   return await d1
     .prepare(getAccountQuery)
     .bind(args.id)
-    .first<GetAccountRow | null>();
+    .first<RawGetAccountRow | null>()
+    .then((raw: RawGetAccountRow | null) => raw ? {
+      pk: raw.pk,
+      id: raw.id,
+      displayName: raw.display_name,
+      email: raw.email,
+    } : null);
 }
 
 const listAccountsQuery = `-- name: ListAccounts :many
-SELECT * FROM account;`;
+SELECT pk, id, display_name, email
+FROM account`;
+
+export type ListAccountsParams = {
+};
 
 export type ListAccountsRow = {
-    pk: bigint;
-    id: string;
-    displayName: string;
-    email: string;
-}
+  pk: bigint;
+  id: string;
+  displayName: string;
+  email: string | null;
+};
+
+type RawListAccountsRow = {
+  pk: bigint;
+  id: string;
+  display_name: string;
+  email: string | null;
+};
 
 export async function listAccounts(
   d1: D1Database,
   args: ListAccountsParams
-): Promise<<D1Result<ListAccountsRow>> {
+): Promise<D1Result<ListAccountsRow>> {
   return await d1
     .prepare(listAccountsQuery)
-    // D1Result の results は T[] なので ListAccountRow でいい
-    .all<ListAccountsRow>();
+    .all<RawListAccountsRow>()
+    .then((r: D1Result<RawListAccountsRow>) => { return {
+      ...r,
+      results: r.results ? r.results.map((raw: RawListAccountsRow) => { return {
+        pk: raw.pk,
+        id: raw.id,
+        displayName: raw.display_name,
+        email: raw.email,
+      // ここは undefined じゃないとだめそう
+      }}) : null,
+    }});
 }
 
 const createAccountQuery = `-- name: CreateAccount :exec
-INSERT INTO account (id, display_name, email) VALUES ($1, $2, $3)`;
+INSERT INTO account (id, display_name, email)
+VALUES (?1, ?2, ?3)`;
 
 export type CreateAccountParams = {
   id: string;
   displayName: string;
-  email: string;
+  email: string | null;
 };
 
-// exec なので run
+export type CreateAccountRow = {
+};
+
 export async function createAccount(
   d1: D1Database,
   args: CreateAccountParams
-): Promise<D1Result> {
-  await d1
+): Promise<D1Result<CreateAccountRow>> {
+  return await d1
     .prepare(createAccountQuery)
     .bind(args.id, args.displayName, args.email)
-    // run の場合は results は入ってこない
-    // success と meta のみ
-    .run();
-};
+    .run<CreateAccountRow>();
+}
 
 const updateAccountDisplayNameQuery = `-- name: UpdateAccountDisplayName :one
 UPDATE account
-SET display_name = $2
-WHERE id = $1
-RETURNING *;`;
+SET display_name = ?1
+WHERE id = ?2
+RETURNING pk, id, display_name, email`;
 
 export type UpdateAccountDisplayNameParams = {
-  id: string;
   displayName: string;
+  id: string;
 };
 
-// one なので first
+export type UpdateAccountDisplayNameRow = {
+  pk: bigint;
+  id: string;
+  displayName: string;
+  email: string | null;
+};
+
+type RawUpdateAccountDisplayNameRow = {
+  pk: bigint;
+  id: string;
+  display_name: string;
+  email: string | null;
+};
+
 export async function updateAccountDisplayName(
   d1: D1Database,
   args: UpdateAccountDisplayNameParams
 ): Promise<UpdateAccountDisplayNameRow | null> {
-  await d1
-    .prepare(createAccountQuery)
-    .bind(args.id, args.displayName)
-    .first<UpdateAccountDisplayNameRow | null>();
+  return await d1
+    .prepare(updateAccountDisplayNameQuery)
+    .bind(args.displayName, args.id)
+    .first<RawUpdateAccountDisplayNameRow | null>()
+    .then((raw: RawUpdateAccountDisplayNameRow | null) => raw ? {
+      pk: raw.pk,
+      id: raw.id,
+      displayName: raw.display_name,
+      email: raw.email,
+    } : null);
+}
+
+const deleteAccountQuery = `-- name: DeleteAccount :exec
+DELETE FROM account
+WHERE id = ?1`;
+
+export type DeleteAccountParams = {
+  id: string;
 };
+
+export type DeleteAccountRow = {
+};
+
+export async function deleteAccount(
+  d1: D1Database,
+  args: DeleteAccountParams
+): Promise<D1Result<DeleteAccountRow>> {
+  return await d1
+    .prepare(deleteAccountQuery)
+    .bind(args.id)
+    .run<DeleteAccountRow>();
+}
 ```
 
 ## 利用例
@@ -281,8 +356,8 @@ export const action: ActionFunction = async ({ request }) => {
   ],
   "sql": [
     {
-      "schema": "schema.sql",
-      "queries": "query.sql",
+      "schema": "db/schema.sql",
+      "queries": "db/query.sql",
       "engine": "sqlite",
       "codegen": [
         {
@@ -395,13 +470,51 @@ declare abstract class D1PreparedStatement {
 
 3 系と 4 系で異なるので要注意。
 
-## 整理
+## 自動生成されたコード
 
-実際に remix に組み込んでみている。細かいのを色々修正済み。
+```javascript
+{
+  "version": "2",
+  "plugins":
+    [
+      {
+        "name": "typescript-d1",
+        "wasm":
+          {
+            "url": "file://.sqlc-plugin/sqlc-gen-typescript-d1.wasm",
+            "sha256": "38dd9bf3214ef94c0beabd0694f6093b5ef2dd4ebe7ba234aac3ccd9f1c34adc",
+          },
+      },
+    ],
+  "sql":
+    [
+      {
+        "schema": "db/schema.sql",
+        "queries": "db/query.sql",
+        "engine": "sqlite",
+        "codegen":
+          [
+            {
+              "out": "src/gen/sqlc",
+              "plugin": "typescript-d1",
+              "options": "workers-types-v4=1",
+            },
+          ],
+      },
+    ],
+}
+```
+
+prettier が走ってる野で、色々変更される。
+基本的にいじらない方がいいので、ignore に指定した方がよさそう。
 
 ```typescript
+import { D1Database, D1Result } from '@cloudflare/workers-types/2022-11-30'
+
 const getAccountQuery = `-- name: GetAccount :one
-SELECT pk, id, display_name, email FROM account WHERE id = ?1`
+SELECT pk, id, display_name, email
+FROM account
+WHERE id = ?1`
 
 export type GetAccountParams = {
   id: string
@@ -435,7 +548,6 @@ export async function getAccount(
             pk: raw.pk,
             id: raw.id,
             displayName: raw.display_name,
-            // null 許容はどうする？
             email: raw.email,
           }
         : null,
@@ -443,7 +555,8 @@ export async function getAccount(
 }
 
 const listAccountsQuery = `-- name: ListAccounts :many
-SELECT pk, id, display_name, email FROM account`
+SELECT pk, id, display_name, email
+FROM account`
 
 export type ListAccountsParams = {}
 
@@ -480,7 +593,7 @@ export async function listAccounts(
                 email: raw.email,
               }
             })
-          : undefined,
+          : null,
       }
     })
 }
@@ -492,12 +605,19 @@ VALUES (?1, ?2, ?3)`
 export type CreateAccountParams = {
   id: string
   displayName: string
-  email: string
+  email: string | null
 }
+
 export type CreateAccountRow = {}
 
-export async function createAccount(d1: D1Database, args: CreateAccountParams): Promise<D1Result> {
-  return await d1.prepare(createAccountQuery).bind(args.id, args.displayName, args.email).run()
+export async function createAccount(
+  d1: D1Database,
+  args: CreateAccountParams,
+): Promise<D1Result<CreateAccountRow>> {
+  return await d1
+    .prepare(createAccountQuery)
+    .bind(args.id, args.displayName, args.email)
+    .run<CreateAccountRow>()
 }
 
 const updateAccountDisplayNameQuery = `-- name: UpdateAccountDisplayName :one
@@ -543,5 +663,22 @@ export async function updateAccountDisplayName(
           }
         : null,
     )
+}
+
+const deleteAccountQuery = `-- name: DeleteAccount :exec
+DELETE FROM account
+WHERE id = ?1`
+
+export type DeleteAccountParams = {
+  id: string
+}
+
+export type DeleteAccountRow = {}
+
+export async function deleteAccount(
+  d1: D1Database,
+  args: DeleteAccountParams,
+): Promise<D1Result<DeleteAccountRow>> {
+  return await d1.prepare(deleteAccountQuery).bind(args.id).run<DeleteAccountRow>()
 }
 ```
