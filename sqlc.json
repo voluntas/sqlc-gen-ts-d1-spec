@@ -12,7 +12,7 @@
   "sql": [
     {
       "schema": "db/schema.sql",
-      "queries": "db/query.sql",
+      "queries": "db/query/",
       "engine": "sqlite",
       "codegen": [
         {

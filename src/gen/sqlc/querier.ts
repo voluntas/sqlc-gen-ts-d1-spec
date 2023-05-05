@@ -192,23 +192,18 @@ export async function createOrgAccount(
 }
 
 const getOrgAccountQuery = `-- name: GetOrgAccount :one
-SELECT
-  -- account.*, org.*
-  account.pk AS account_pk,
+SELECT account.pk AS account_pk,
   account.id AS account_id,
   account.display_name AS account_display_name,
   account.email AS account_email,
   org.pk AS org_pk,
   org.id AS org_id,
   org.display_name AS org_display_name
-FROM
-  account
-JOIN
-  org_account ON account.pk = org_account.account_pk
-JOIN
-  org ON org_account.org_pk = org.pk
-WHERE
-  org.id = ?1 AND account.id = ?2`;
+FROM account
+  JOIN org_account ON account.pk = org_account.account_pk
+  JOIN org ON org_account.org_pk = org.pk
+WHERE org.id = ?1
+  AND account.id = ?2`;
 
 export type GetOrgAccountParams = {
   orgId: string;
