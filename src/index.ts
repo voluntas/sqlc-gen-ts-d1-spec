@@ -31,7 +31,7 @@ export default {
         accountPk: 1,
       })
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
 
     const r = await env.D1_TEST.prepare(
