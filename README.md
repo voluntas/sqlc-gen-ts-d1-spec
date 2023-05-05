@@ -4,11 +4,9 @@
 
 このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様を記載しています。
 
-## 動作確認
+## プラグイン
 
-https://github.com/orisano/sqlc-gen-typescript-d1
-
-動作確認を行うために、このリポジトリを作成しています。
+[orisano/sqlc\-gen\-typescript\-d1](https://github.com/orisano/sqlc-gen-typescript-d1) の動作を確認できます。
 
 ## 自動生成されたコード
 
@@ -300,52 +298,41 @@ export async function deleteAccount(
 
 ## 利用例
 
-- import は適当
-- remix から利用するイメージ
-- global.d.ts に設定されている `D1: D1Database` を引っ張る
-
 ```js
-from db import './gen/sqlc'
+import * as db from './gen/sqlc/querier'
 
-export const action: ActionFunction = async ({ request }) => {
-    // one なので GetAccountRaw か null が返される
-    // GetAccount
-    const account = await db.getAccount(D1, db.GetAccountParams{
-      id: 'spam'
-    });
-    if (!account) {
-      // 404
+export interface Env {
+  D1_TEST: D1Database;
+}
+
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    try {
+      const result = await db.createAccount(env.D1_TEST, {
+        id: 'voluntas',
+        displayName: 'V',
+        email: 'v@example.com',
+      })
+    } catch (error) {
+      // console.log(error)
     }
 
-    // 戻りは D1Result で results が ListAccountsRow[] になる
-    // ListAccounts
-    const result = await db.listAccounts(D1);
-    if (!result.success) {
-      // 404
-    }
+    const result = await db.listAccounts(env.D1_TEST)
+    console.log(result)
 
-    // 戻りは D1Result
-    // run なので results は存在しない
-    // CreateAccount
-    const result = await db.createAccount(D1, db.CreateAccountParams{
-      id: 'egg',
-      displayName: 'Egg',
-      email: 'egg@example.com',
-    });
-    if (!result.success) {
-      // 404
-    }
-
-    // one なので first で UpdateAccountDisplayNameRow か null が返される
-    // UpdateAccount
-    const account = await db.updateAccountDisplayNameQuery(D1, db.updateAccountDisplayNameQueryParams{
-      id: 'egg',
-      displayName: 'Egg',
+    const account = await db.getAccount(env.D1_TEST, {
+      id: 'voluntas',
     })
-    if (account) {
-      // 404
+    if (!account) {
+      return new Response('Not Found', { status: 404 })
     }
-  }
+    console.log(account)
+
+    return new Response(JSON.stringify(account), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    })
+  },
 }
 ```
 
@@ -387,39 +374,16 @@ export const action: ActionFunction = async ({ request }) => {
   - v3 自体は廃止されていき、今後は v4 になる流れ
   - v4 のバージョンももしかすると細かく指定できた方がいいのか？
 
-### emit_pointers_for_null_types
+### null の扱い
 
 - pgx/v4 で利用可能な Go の型が \*time.Time などになる方式
 - SQLite もこれと似たような仕組みがあると嬉しそう
 - スキーマから null が入る可能性があるカラムを探して、そのカラムの型を nullable にする
 - 型的には null | string で問題ないはず
-- sqlc への SQLite の対応が必要になる
-- sqlc_narg 方式だと null が入る可能性のカラム全てに追加していく必要がある
-
-## D1 メモ
-
-- remix v1 だとグローバルにあるので D1_TEST とかになる
-
-```js
-const stmt = D1_TEST.prepare(
-  "SELECT * FROM users WHERE name = ?"
-).bind("John Doe").first<User | null>();
-```
-
-- first と all と run がある
-- sqlc 的には one と many と exec に対応する
-
-```js
-{
-  results: array | null, // [] if empty, or null if it doesn't apply
-  success: boolean, // true if the operation was successful, false otherwise
-  meta: {
-    duration: number, // duration of the operation in milliseconds
-  }
-}
-```
 
 ## D1 の型
+
+3 系と 4 系で異なるので要注意。
 
 ### 3 系
 
@@ -477,5 +441,3 @@ declare abstract class D1PreparedStatement {
   raw<T = unknown>(): Promise<T[]>
 }
 ```
-
-3 系と 4 系で異なるので要注意。
