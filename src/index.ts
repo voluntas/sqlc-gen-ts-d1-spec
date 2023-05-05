@@ -52,6 +52,11 @@ export default {
       .raw()
     console.log('CreateAccountLog: ', r2)
 
+    const r4 = await env.D1_TEST.prepare(
+      "SELECT json_extract(data, '$.a') AS a_value FROM account_log WHERE data IS NOT NULL;",
+    ).raw()
+    console.log('GetAccountLogRaw: ', r4)
+
     const r3 = await env.D1_TEST.prepare('SELECT * FROM account_log;').all()
     console.log('ListAccountLogs: ', r3)
 
