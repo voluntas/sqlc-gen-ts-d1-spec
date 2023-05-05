@@ -170,3 +170,7 @@ dist
 
 .dev.vars
 .wrangler/
+
+# sqlc wasm
+
+.sqlc-plugin/

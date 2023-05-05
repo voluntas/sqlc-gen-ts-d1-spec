@@ -6,16 +6,16 @@
         "name": "typescript-d1",
         "wasm":
           {
-            "url": "file://plugin/bin/sqlc-gen-typescript-d1.wasm",
-            "sha256": "1fd712423ead87e945d4cf6148b5ea7cf19a2243bee496086342d863601dc52e",
+            "url": "file://.sqlc-plugin/sqlc-gen-typescript-d1.wasm",
+            "sha256": "38dd9bf3214ef94c0beabd0694f6093b5ef2dd4ebe7ba234aac3ccd9f1c34adc",
           },
       },
     ],
   "sql":
     [
       {
-        "schema": "schema.sql",
-        "queries": "query.sql",
+        "schema": "db/schema.sql",
+        "queries": "db/query.sql",
         "engine": "sqlite",
         "codegen":
           [
