@@ -20,3 +20,16 @@ RETURNING *;
 -- name: DeleteAccount :exec
 DELETE FROM account
 WHERE id = @id;
+
+-- name: GetOrgAccount :one
+SELECT
+  account.*,
+  org.*
+FROM
+  account
+JOIN
+  org_account ON account.pk = org_account.account_pk
+JOIN
+  org ON org_account.org_pk = org.pk
+WHERE
+  org.id = @org_id AND account.id = @account_id;

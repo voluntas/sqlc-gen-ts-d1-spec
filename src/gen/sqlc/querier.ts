@@ -153,3 +153,60 @@ export async function deleteAccount(
     .run();
 }
 
+const getOrgAccountQuery = `-- name: GetOrgAccount :one
+SELECT
+  account.pk, account.id, account.display_name, account.email,
+  org.pk, org.id, org.display_name
+FROM
+  account
+JOIN
+  org_account ON account.pk = org_account.account_pk
+JOIN
+  org ON org_account.org_pk = org.pk
+WHERE
+  org.id = ?1 AND account.id = ?2`;
+
+export type GetOrgAccountParams = {
+  orgId: string;
+  accountId: string;
+};
+
+export type GetOrgAccountRow = {
+  pk: bigint;
+  id: string;
+  displayName: string;
+  email: string | null;
+  pk: bigint;
+  id: string;
+  displayName: string;
+};
+
+type RawGetOrgAccountRow = {
+  pk: bigint;
+  id: string;
+  display_name: string;
+  email: string | null;
+  pk: bigint;
+  id: string;
+  display_name: string;
+};
+
+export async function getOrgAccount(
+  d1: D1Database,
+  args: GetOrgAccountParams
+): Promise<GetOrgAccountRow | null> {
+  return await d1
+    .prepare(getOrgAccountQuery)
+    .bind(args.orgId, args.accountId)
+    .first<RawGetOrgAccountRow | null>()
+    .then((raw: RawGetOrgAccountRow | null) => raw ? {
+      pk: raw.pk,
+      id: raw.id,
+      displayName: raw.display_name,
+      email: raw.email,
+      pk: raw.pk,
+      id: raw.id,
+      displayName: raw.display_name,
+    } : null);
+}
+
