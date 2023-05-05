@@ -173,9 +173,6 @@ const listAccountsQuery = `-- name: ListAccounts :many
 SELECT pk, id, display_name, email
 FROM account`;
 
-export type ListAccountsParams = {
-};
-
 export type ListAccountsRow = {
   pk: bigint;
   id: string;
@@ -191,9 +188,7 @@ type RawListAccountsRow = {
 };
 
 export async function listAccounts(
-  d1: D1Database,
-  // これ不要、引数が存在しないときは d1 だけ渡す
-  args: ListAccountsParams
+  d1: D1Database
 ): Promise<D1Result<ListAccountsRow>> {
   return await d1
     .prepare(listAccountsQuery)
@@ -219,17 +214,14 @@ export type CreateAccountParams = {
   email: string | null;
 };
 
-export type CreateAccountRow = {
-};
-
 export async function createAccount(
   d1: D1Database,
   args: CreateAccountParams
-): Promise<D1Result<CreateAccountRow>> {
+): Promise<D1Result> {
   return await d1
     .prepare(createAccountQuery)
     .bind(args.id, args.displayName, args.email)
-    .run<CreateAccountRow>();
+    .run();
 }
 
 const updateAccountDisplayNameQuery = `-- name: UpdateAccountDisplayName :one
@@ -281,19 +273,14 @@ export type DeleteAccountParams = {
   id: string;
 };
 
-export type DeleteAccountRow = {
-};
-
 export async function deleteAccount(
   d1: D1Database,
   args: DeleteAccountParams
-// exec の場合は DeleteAccountRow を返す必要はなく D1Result だけで十分
-// ただし any より DeleteAccountRow が入ってた方が良いのか？
-): Promise<D1Result<DeleteAccountRow>> {
+): Promise<D1Result> {
   return await d1
     .prepare(deleteAccountQuery)
     .bind(args.id)
-    .run<DeleteAccountRow>();
+    .run();
 }
 ```
 

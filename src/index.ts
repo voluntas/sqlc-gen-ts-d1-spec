@@ -16,8 +16,7 @@ export default {
       // console.log(error)
     }
 
-    // {} は不要か
-    const result = await db.listAccounts(env.D1_TEST, {})
+    const result = await db.listAccounts(env.D1_TEST)
     console.log(result)
 
     const account = await db.getAccount(env.D1_TEST, {

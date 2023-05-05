@@ -1,30 +1,26 @@
 {
   "version": "2",
-  "plugins":
-    [
-      {
-        "name": "typescript-d1",
-        "wasm":
-          {
-            "url": "file://.sqlc-plugin/sqlc-gen-typescript-d1.wasm",
-            "sha256": "10b97c530eeea82daf6d3c5547427d908e6da7c0642a00c94f808db9f306b679",
-          },
-      },
-    ],
-  "sql":
-    [
-      {
-        "schema": "db/schema.sql",
-        "queries": "db/query.sql",
-        "engine": "sqlite",
-        "codegen":
-          [
-            {
-              "out": "src/gen/sqlc",
-              "plugin": "typescript-d1",
-              "options": "workers-types-v4=1",
-            },
-          ],
-      },
-    ],
+  "plugins": [
+    {
+      "name": "typescript-d1",
+      "wasm": {
+        "url": "file://.sqlc-plugin/sqlc-gen-typescript-d1.wasm",
+        "sha256": "10b97c530eeea82daf6d3c5547427d908e6da7c0642a00c94f808db9f306b679"
+      }
+    }
+  ],
+  "sql": [
+    {
+      "schema": "db/schema.sql",
+      "queries": "db/query.sql",
+      "engine": "sqlite",
+      "codegen": [
+        {
+          "out": "src/gen/sqlc",
+          "plugin": "typescript-d1",
+          "options": "workers-types-v4=1",
+        }
+      ]
+    }
+  ]
 }
