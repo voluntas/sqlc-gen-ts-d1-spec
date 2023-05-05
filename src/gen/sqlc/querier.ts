@@ -74,8 +74,6 @@ export async function listAccounts(
         id: raw.id,
         displayName: raw.display_name,
         email: raw.email,
-      // ここは型的に undefined じゃなとだめそう
-      // }}) : null,
       }}) : undefined,
     }});
 }

@@ -174,3 +174,4 @@ dist
 # sqlc wasm
 
 .sqlc-plugin/
+
