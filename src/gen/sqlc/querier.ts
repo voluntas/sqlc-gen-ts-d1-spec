@@ -10,14 +10,14 @@ export type GetAccountParams = {
 };
 
 export type GetAccountRow = {
-  pk: bigint;
+  pk: number;
   id: string;
   displayName: string;
   email: string | null;
 };
 
 type RawGetAccountRow = {
-  pk: bigint;
+  pk: number;
   id: string;
   display_name: string;
   email: string | null;
@@ -44,14 +44,14 @@ SELECT pk, id, display_name, email
 FROM account`;
 
 export type ListAccountsRow = {
-  pk: bigint;
+  pk: number;
   id: string;
   displayName: string;
   email: string | null;
 };
 
 type RawListAccountsRow = {
-  pk: bigint;
+  pk: number;
   id: string;
   display_name: string;
   email: string | null;
@@ -106,14 +106,14 @@ export type UpdateAccountDisplayNameParams = {
 };
 
 export type UpdateAccountDisplayNameRow = {
-  pk: bigint;
+  pk: number;
   id: string;
   displayName: string;
   email: string | null;
 };
 
 type RawUpdateAccountDisplayNameRow = {
-  pk: bigint;
+  pk: number;
   id: string;
   display_name: string;
   email: string | null;
@@ -153,60 +153,41 @@ export async function deleteAccount(
     .run();
 }
 
-const getOrgAccountQuery = `-- name: GetOrgAccount :one
-SELECT
-  account.pk, account.id, account.display_name, account.email,
-  org.pk, org.id, org.display_name
-FROM
-  account
-JOIN
-  org_account ON account.pk = org_account.account_pk
-JOIN
-  org ON org_account.org_pk = org.pk
-WHERE
-  org.id = ?1 AND account.id = ?2`;
+const createOrgQuery = `-- name: CreateOrg :exec
+INSERT INTO org (id, display_name)
+VALUES (?1, ?2)`;
 
-export type GetOrgAccountParams = {
-  orgId: string;
-  accountId: string;
-};
-
-export type GetOrgAccountRow = {
-  pk: bigint;
-  id: string;
-  displayName: string;
-  email: string | null;
-  pk: bigint;
+export type CreateOrgParams = {
   id: string;
   displayName: string;
 };
 
-type RawGetOrgAccountRow = {
-  pk: bigint;
-  id: string;
-  display_name: string;
-  email: string | null;
-  pk: bigint;
-  id: string;
-  display_name: string;
-};
-
-export async function getOrgAccount(
+export async function createOrg(
   d1: D1Database,
-  args: GetOrgAccountParams
-): Promise<GetOrgAccountRow | null> {
+  args: CreateOrgParams
+): Promise<D1Result> {
   return await d1
-    .prepare(getOrgAccountQuery)
-    .bind(args.orgId, args.accountId)
-    .first<RawGetOrgAccountRow | null>()
-    .then((raw: RawGetOrgAccountRow | null) => raw ? {
-      pk: raw.pk,
-      id: raw.id,
-      displayName: raw.display_name,
-      email: raw.email,
-      pk: raw.pk,
-      id: raw.id,
-      displayName: raw.display_name,
-    } : null);
+    .prepare(createOrgQuery)
+    .bind(args.id, args.displayName)
+    .run();
+}
+
+const createOrgAccountQuery = `-- name: CreateOrgAccount :exec
+INSERT INTO org_account (org_pk, account_pk)
+VALUES (?1, ?2)`;
+
+export type CreateOrgAccountParams = {
+  orgPk: number;
+  accountPk: number;
+};
+
+export async function createOrgAccount(
+  d1: D1Database,
+  args: CreateOrgAccountParams
+): Promise<D1Result> {
+  return await d1
+    .prepare(createOrgAccountQuery)
+    .bind(args.orgPk, args.accountPk)
+    .run();
 }
 
