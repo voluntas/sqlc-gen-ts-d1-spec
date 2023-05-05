@@ -19,7 +19,7 @@ export type OrgAccount = {
 export type AccountLog = {
   pk: number;
   tag: string;
-  time:  | null;
+  time: string | null;
   data: string;
 };
 
