@@ -193,8 +193,8 @@ export async function createOrgAccount(
 }
 
 const getOrgAccountQuery = `-- name: GetOrgAccount :one
-SELECT account.pk, account.id, account.display_name, account.email,
-  org.pk, org.id, org.display_name
+SELECT account.pk AS account_pk, account.id AS account_id, account.display_name AS account_display_name, account.email AS account_email,
+  org.pk AS org_pk, org.id AS org_id, org.display_name AS org_display_name
 FROM account
   JOIN org_account ON account.pk = org_account.account_pk
   JOIN org ON org_account.org_pk = org.pk
@@ -212,13 +212,13 @@ export type GetOrgAccountRow = {
 };
 
 type RawGetOrgAccountRow = {
-  pk: number;
-  id: string;
-  display_name: string;
-  email: string | null;
-  pk: number;
-  id: string;
-  display_name: string;
+  account_pk: number;
+  account_id: string;
+  account_display_name: string;
+  account_email: string | null;
+  org_pk: number;
+  org_id: string;
+  org_display_name: string;
 };
 
 export async function getOrgAccount(
@@ -231,15 +231,15 @@ export async function getOrgAccount(
     .first<RawGetOrgAccountRow | null>()
     .then((raw: RawGetOrgAccountRow | null) => raw ? {
       account: {
-        pk: raw.pk,
-        id: raw.id,
-        displayName: raw.display_name,
-        email: raw.email,
+        pk: raw.account_pk,
+        id: raw.account_id,
+        displayName: raw.account_display_name,
+        email: raw.account_email,
       },
       org: {
-        pk: raw.pk,
-        id: raw.id,
-        displayName: raw.display_name,
+        pk: raw.org_pk,
+        id: raw.org_id,
+        displayName: raw.org_display_name,
       },
     } : null);
 }
