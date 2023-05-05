@@ -40,6 +40,9 @@
 
 ### JSON 型と object についての調査
 
+https://www.sqlite.org/json1.html
+
+- 最新の SQLite3 では JSON 型が標準で入ってる
 - JSON 型は定義はできる
 - 内部では文字列型として扱われているっぽい
 - INSERT するときも文字列化が必要
@@ -47,6 +50,8 @@
 - JSON クエリーが利用できる
 - object としては扱えないので string として扱うのがよさそう
   - 実際 pgx/v5 から JSONB は Go の string として扱っていた
+- json_extract 使うと JSON 形式 (object) で返される
+  - 文字列じゃない！
 
 ### .\* を利用したときの挙動
 

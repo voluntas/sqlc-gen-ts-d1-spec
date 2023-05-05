@@ -48,12 +48,12 @@ export default {
     console.log('GetOrgAccountRaw: ', r)
 
     const r2 = await env.D1_TEST.prepare('INSERT INTO account_log (tag, data) VALUES ($1, $2);')
-      .bind('debug', JSON.stringify({ a: 'b' }))
+      .bind('debug', JSON.stringify({ a: 'b', c: 10, d: { a: [1, 2, 3] } }))
       .raw()
     console.log('CreateAccountLog: ', r2)
 
     const r4 = await env.D1_TEST.prepare(
-      "SELECT json_extract(data, '$.a') AS a_value FROM account_log WHERE data IS NOT NULL;",
+      "SELECT json_extract(data, '$.c') AS a_value FROM account_log WHERE data IS NOT NULL;",
     ).raw()
     console.log('GetAccountLogRaw: ', r4)
 
