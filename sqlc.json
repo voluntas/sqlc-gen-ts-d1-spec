@@ -18,7 +18,7 @@
         {
           "out": "src/gen/sqlc",
           "plugin": "typescript-d1",
-          "options": "workers-types-v4=1",
+          "options": "workers-types-v4=2022-11-30"
         }
       ]
     }
