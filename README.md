@@ -2,11 +2,13 @@
 
 ## 概要
 
-このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様を記載しています。
+このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様と実装のテストを公開しています。
 
-## プラグイン
+ライセンスは APL 2.0 です。
 
-[orisano/sqlc\-gen\-typescript\-d1](https://github.com/orisano/sqlc-gen-typescript-d1) の動作を確認できます。
+## 実装
+
+[orisano/sqlc\-gen\-typescript\-d1](https://github.com/orisano/sqlc-gen-typescript-d1)
 
 ## 自動生成されたコード
 
