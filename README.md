@@ -8,6 +8,8 @@
 
 [orisano/sqlc\-gen\-typescript\-d1](https://github.com/orisano/sqlc-gen-typescript-d1)
 
+[Community projects · Cloudflare D1 docs](https://developers.cloudflare.com/d1/platform/community-projects/) に登録したい。
+
 ## 自動生成されたコード
 
 - https://github.com/voluntas/sqlc-gen-ts-d1-test/blob/main/sqlc.json
