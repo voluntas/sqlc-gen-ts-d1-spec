@@ -4,8 +4,6 @@
 
 このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様と実装のテストを公開しています。
 
-ライセンスは APL 2.0 です。
-
 ## 実装
 
 [orisano/sqlc\-gen\-typescript\-d1](https://github.com/orisano/sqlc-gen-typescript-d1)
@@ -300,6 +298,12 @@ export async function deleteAccount(
 
 ## 利用例
 
+```console
+$ pnpm install
+$ pnpm run d1-import
+$ pnpm run dev
+```
+
 ```js
 import * as db from './gen/sqlc/querier'
 
@@ -310,6 +314,7 @@ export interface Env {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     try {
+      // すでに作られている場合は例外が上がるのでキャッチ
       const result = await db.createAccount(env.D1_TEST, {
         id: 'voluntas',
         displayName: 'V',
@@ -319,9 +324,11 @@ export default {
       // console.log(error)
     }
 
+    // 存在しない場合は [] が戻ってくるはず
     const result = await db.listAccounts(env.D1_TEST)
     console.log(result)
 
+    // 存在しない場合は null が戻ってくる、はず
     const account = await db.getAccount(env.D1_TEST, {
       id: 'voluntas',
     })
@@ -442,4 +449,24 @@ declare abstract class D1PreparedStatement {
   all<T = unknown>(): Promise<D1Result<T>>
   raw<T = unknown>(): Promise<T[]>
 }
+```
+
+## ライセンス
+
+Apache License 2.0
+
+```
+Copyright 2023-2023, @voluntas
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```
