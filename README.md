@@ -45,6 +45,10 @@ SQLite3 自体は問題ない挙動なので、 現時点で D1 側の仕様。
 
 D1 では bigint が利用できない。
 
+https://developers.cloudflare.com/d1/platform/client-api/#type-conversion
+
+> 1 D1 supports 64-bit signed INTEGER values internally, however BigInts are not currently supported in the API yet. JavaScript integers are safe up to Number.MAX_SAFE_INTEGER.
+
 ## 参考資料
 
 - https://github.com/kyleconroy/sqlc/issues/296#issuecomment-1250407683
