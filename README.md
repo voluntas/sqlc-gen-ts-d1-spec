@@ -192,6 +192,7 @@ type RawListAccountsRow = {
 
 export async function listAccounts(
   d1: D1Database,
+  // これ不要、引数が存在しないときは d1 だけ渡す
   args: ListAccountsParams
 ): Promise<D1Result<ListAccountsRow>> {
   return await d1

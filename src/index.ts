@@ -16,11 +16,12 @@ export default {
       // console.log(error)
     }
 
-    const result = await db.listAccounts(env.D1_TEST)
+    // {} は不要か
+    const result = await db.listAccounts(env.D1_TEST, {})
     console.log(result)
 
     const account = await db.getAccount(env.D1_TEST, {
-      id: 'voluntas'
+      id: 'voluntas',
     })
     if (!account) {
       return new Response('Not Found', { status: 404 })
