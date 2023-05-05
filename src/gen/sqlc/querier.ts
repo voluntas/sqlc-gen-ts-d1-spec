@@ -1,3 +1,5 @@
+// これはまだ sqlc-gen-typescript-d1 で自動生成したコードではありません
+
 import { D1Database, D1Result } from '@cloudflare/workers-types'
 
 const getAccountQuery = `-- name: GetAccount :one
