@@ -1,0 +1,11 @@
+/.cache
+/.github
+/.husky
+/build
+/public
+/node_modules
+/dist
+/app/styles/tailwind.css
+
+# 生成コードはいじらない
+/src/gen
