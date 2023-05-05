@@ -39,6 +39,8 @@ https://github.com/orisano/sqlc-gen-typescript-d1
   - sqlc 作者による kotlin-pg 向けの sqlc plugin のコード
 - [Cloudflare D1 を type\-safe で O/R マッパーぽく使用できるようにする](https://zenn.dev/chimame/articles/23aafcc2e70f33)
   - sqldef を使ってるらしいので、 sqlc と sqldef 組み合わせたい
+- https://miniflare.dev/testing/vitest
+  - miniflare で vitest を使った例
 
 ## SQL
 
