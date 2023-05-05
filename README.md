@@ -247,7 +247,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 ## sqlc.json
 
-```js
+```javascript
 {
   "version": "2",
   "plugins": [
@@ -290,7 +290,7 @@ export const action: ActionFunction = async ({ request }) => {
 - スキーマから null が入る可能性があるカラムを探して、そのカラムの型を nullable にする
 - 型的には null | string で問題ないはず
 - sqlc への SQLite の対応が必要になる
-- sqlc_narg 方式だと null が入る可能性のカラム全てに追加していく必要があってやっかい？
+- sqlc_narg 方式だと null が入る可能性のカラム全てに追加していく必要がある
 
 ## D1 メモ
 
