@@ -1,5 +1,15 @@
 # Cloudflare D1 向けの sqlc plugin (Wasm) の設計仕様
 
+## 概要
+
+このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様を記載しています。
+
+## 動作確認
+
+https://github.com/orisano/sqlc-gen-typescript-d1
+
+動作確認を行うために、このリポジトリを作成しています。
+
 ## モチベーション
 
 - sqlc は素晴らしいので、SQL を利用するならなんでも sqlc を使いたい
