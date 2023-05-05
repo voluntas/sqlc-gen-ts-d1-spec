@@ -36,16 +36,16 @@ export default {
 
     const r = await env.D1_TEST.prepare(
       'SELECT \
-        account.*, \
-        org.* \
+        account.pk, account.id, account.display_name, account.email, \
+        org.pk, org.id, org.display_name \
        FROM account \
        JOIN org_account ON account.pk = org_account.account_pk \
        JOIN org ON org_account.org_pk = org.pk \
        WHERE org.id = $1 AND account.id = $2;',
     )
       .bind('example', 'voluntas')
-      .first()
-    console.log('複雑なやつ', r)
+      .raw()
+    console.log('GetOrgAccountRaw: ', r)
 
     const result = await db.listAccounts(env.D1_TEST)
 

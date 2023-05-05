@@ -191,3 +191,66 @@ export async function createOrgAccount(
     .run();
 }
 
+const getOrgAccountQuery = `-- name: GetOrgAccount :one
+SELECT
+  -- account.*, org.*
+  account.pk AS account_pk,
+  account.id AS account_id,
+  account.display_name AS account_display_name,
+  account.email AS account_email,
+  org.pk AS org_pk,
+  org.id AS org_id,
+  org.display_name AS org_display_name
+FROM
+  account
+JOIN
+  org_account ON account.pk = org_account.account_pk
+JOIN
+  org ON org_account.org_pk = org.pk
+WHERE
+  org.id = ?1 AND account.id = ?2`;
+
+export type GetOrgAccountParams = {
+  orgId: string;
+  accountId: string;
+};
+
+export type GetOrgAccountRow = {
+  accountPk: number;
+  accountId: string;
+  accountDisplayName: string;
+  accountEmail: string | null;
+  orgPk: number;
+  orgId: string;
+  orgDisplayName: string;
+};
+
+type RawGetOrgAccountRow = {
+  account_pk: number;
+  account_id: string;
+  account_display_name: string;
+  account_email: string | null;
+  org_pk: number;
+  org_id: string;
+  org_display_name: string;
+};
+
+export async function getOrgAccount(
+  d1: D1Database,
+  args: GetOrgAccountParams
+): Promise<GetOrgAccountRow | null> {
+  return await d1
+    .prepare(getOrgAccountQuery)
+    .bind(args.orgId, args.accountId)
+    .first<RawGetOrgAccountRow | null>()
+    .then((raw: RawGetOrgAccountRow | null) => raw ? {
+      accountPk: raw.account_pk,
+      accountId: raw.account_id,
+      accountDisplayName: raw.account_display_name,
+      accountEmail: raw.account_email,
+      orgPk: raw.org_pk,
+      orgId: raw.org_id,
+      orgDisplayName: raw.org_display_name,
+    } : null);
+}
+

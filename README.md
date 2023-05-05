@@ -34,6 +34,17 @@
 - D1 が対応したら tx のテスト
 - batch の仕様
 
+## D1 の挙動
+
+### .\* を利用したときの挙動
+
+D1 では `account.*, org.*` のようにすると、同じカラム名を上書きしてしまう。
+SQLite3 自体は問題ない挙動なので、 現時点で D1 側の仕様。
+
+### bigint が利用できない
+
+D1 では bigint が利用できない。
+
 ## 参考資料
 
 - https://github.com/kyleconroy/sqlc/issues/296#issuecomment-1250407683
