@@ -47,6 +47,14 @@ export default {
       .raw()
     console.log('GetOrgAccountRaw: ', r)
 
+    const r2 = await env.D1_TEST.prepare('INSERT INTO account_log (tag, data) VALUES ($1, $2);')
+      .bind('debug', JSON.stringify({ a: 'b' }))
+      .raw()
+    console.log('CreateAccountLog: ', r2)
+
+    const r3 = await env.D1_TEST.prepare('SELECT * FROM account_log;').all()
+    console.log('ListAccountLogs: ', r3)
+
     const result = await db.listAccounts(env.D1_TEST)
 
     const account = await db.getAccount(env.D1_TEST, {

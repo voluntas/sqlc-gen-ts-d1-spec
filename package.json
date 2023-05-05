@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "wrangler dev --local --persist",
     "workerd": "wrangler dev --experimental-local --persist",
-    "d1-import": "wrangler d1 execute D1_TEST --local --file=db/schema.sql",
+    "d1-local-import": "wrangler d1 execute D1_TEST --local --file=db/schema.sql",
+    "d1-import": "wrangler d1 execute D1_TEST --file=db/schema.sql",
     "test": "vitest",
     "fmt": "prettier --write '**/*.{ts,mts,js,mjs,cjs,html,css,json,md}'"
   },
