@@ -24,6 +24,13 @@ https://github.com/orisano/sqlc-gen-typescript-d1
 - Electron で SQLite3 を使うときにも使いたい
 - sqlc と vitest でテストを書きたい
 
+## TODO
+
+- Makefile で sqlc generate を実行する仕組み
+- vitest で sqlc 経由で生成したコードのテスト
+- D1 が対応したら tx のテスト
+- batch の仕様
+
 ## 参考資料
 
 - https://github.com/kyleconroy/sqlc/issues/296#issuecomment-1250407683
