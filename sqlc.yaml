@@ -1,0 +1,30 @@
+{
+  "version": "2",
+  "plugins":
+    [
+      {
+        "name": "typescript-d1",
+        "wasm":
+          {
+            "url": "file://plugin/bin/sqlc-gen-typescript-d1.wasm",
+            "sha256": "1fd712423ead87e945d4cf6148b5ea7cf19a2243bee496086342d863601dc52e",
+          },
+      },
+    ],
+  "sql":
+    [
+      {
+        "schema": "schema.sql",
+        "queries": "query.sql",
+        "engine": "sqlite",
+        "codegen":
+          [
+            {
+              "out": "src/gen/sqlc",
+              "plugin": "typescript-d1",
+              "options": "workers-types-v4=1",
+            },
+          ],
+      },
+    ],
+}

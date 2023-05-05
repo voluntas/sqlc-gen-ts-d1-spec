@@ -1,0 +1,13 @@
+name = "sqlc-gen-ts-d1-test"
+
+main = "src/index.ts"
+
+workers_dev = false
+
+compatibility_date = "2023-04-19"
+
+[[d1_databases]]
+binding = "D1_TEST"
+database_name = "d1_test"
+database_id = "ea5f7a20-2d66-4784-92b1-849f40c6bf12"
+preview_database_id = "ignore"

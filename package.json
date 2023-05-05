@@ -1,0 +1,27 @@
+{
+  "name": "sqlc-gen-ts-d1-test",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --local --persist",
+    "d1-import": "wrangler d1 execute D1_TEST --local --file=db/schema.sql",
+    "test": "vitest",
+    "fmt": "prettier --write '**/*.{ts,mts,js,mjs,cjs,html,css,json,md}'"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230419.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4",
+    "vitest": "^0.31.0",
+    "vitest-environment-miniflare": "^2.13.0",
+    "wrangler": "^2.19.0"
+  },
+  "packageManager": "pnpm@8.4.0",
+  "engines": {
+    "node": ">=20.0"
+  }
+}

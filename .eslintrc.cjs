@@ -1,0 +1,51 @@
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 2021, // Allows for the parsing of modern ECMAScript features
+    sourceType: 'module', // Allows for the use of imports
+  },
+  root: true,
+  env: { node: true, browser: true, serviceworker: true },
+  plugins: ['@typescript-eslint'],
+  extends: ['plugin:@typescript-eslint/eslint-recommended'],
+  ignorePatterns: ['dist/', 'node_modules/'],
+  rules: {
+    'array-callback-return': 'error',
+    'max-nested-callbacks': ['error', 3],
+    'max-depth': ['error', 4],
+    'consistent-return': 'error',
+    eqeqeq: ['error', 'always'],
+    'no-implicit-coercion': 'error',
+    'no-invalid-this': 'error',
+    'no-new-wrappers': 'error',
+    'no-return-assign': 'error',
+    // 'no-return-await': 'error',
+    'no-sequences': 'error',
+    'no-throw-literal': 'error',
+    'no-unused-expressions': 'error',
+    'no-useless-catch': 'error',
+    'no-useless-escape': 'error',
+    // '@typescript-eslint/no-unused-vars': [
+    //   'error',
+    //   {
+    //     argsIgnorePattern: '^_',
+    //     ignoreRestSiblings: true,
+    //     caughtErrors: 'none',
+    //   },
+    // ],
+    'no-useless-return': 'error',
+    // 'require-await': 'error',
+    yoda: 'error',
+    camelcase: 'error',
+    'no-mixed-operators': 'error',
+    'prefer-const': 'error',
+    'prefer-template': 'error',
+    'template-curly-spacing': ['error', 'never'],
+    'func-names': ['error', 'always'],
+    // 'padding-line-between-statements': [
+    //   'error',
+    //   { blankLine: 'always', prev: '*', next: 'return' },
+    // ],
+    'arrow-parens': [2, 'as-needed'],
+  },
+}
