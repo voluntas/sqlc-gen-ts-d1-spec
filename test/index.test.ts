@@ -21,13 +21,29 @@ test('test 1', async () => {
     `CREATE TABLE account (pk INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT UNIQUE NOT NULL, display_name TEXT NOT NULL, email TEXT);`,
   )
 
-  const r = await db.createAccount(D1, {
+  const r1 = await db.createAccount(D1, {
     id: 'test',
-    displayName: 'test',
+    displayName: 'Test',
     email: 'test@example.com',
   })
-  expect(r.success).toBe(true)
+  expect(r1.success).toBe(true)
 
-  const account = await db.getAccount(D1, { id: 'test' })
-  expect(account?.email).toBe('test@example.com')
+  const a1 = await db.getAccount(D1, { id: 'test' })
+  expect(a1).not.toBeNull()
+  expect(a1?.displayName).toBe('Test')
+  expect(a1?.email).toBe('test@example.com')
+
+  const r2 = await db.listAccounts(D1)
+  expect(r2.success).toBeTruthy()
+  expect(r2.results).not.toBeUndefined()
+  expect(r2.results?.length).toBe(1)
+  expect(r2.results?.[0].displayName).toBe('Test')
+  expect(r2.results?.[0].email).toBe('test@example.com')
+
+  const a2 = await db.updateAccountDisplayName(D1, {
+    id: 'test',
+    displayName: 'Test2',
+  })
+  expect(a2).not.toBeNull()
+  expect(a2?.displayName).toBe('Test2')
 })
