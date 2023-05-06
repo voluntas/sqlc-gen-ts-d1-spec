@@ -22,6 +22,13 @@ test('test 1', async () => {
     `CREATE TABLE account (pk INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT UNIQUE NOT NULL, display_name TEXT NOT NULL, email TEXT);`,
   )
 
-  const r = await db.createAccount(D1, { id: 'test', displayName: 'test', email: null })
-  console.log(r)
+  const r = await db.createAccount(D1, {
+    id: 'test',
+    displayName: 'test',
+    email: 'test@example.com',
+  })
+  expect(r.success).toBe(true)
+
+  const account = await db.getAccount(D1, { id: 'test' })
+  expect(account?.email).toBe('test@example.com')
 })
