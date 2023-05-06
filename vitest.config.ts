@@ -5,8 +5,8 @@ export default defineConfig({
     cache: false,
     environment: 'miniflare',
     environmentOptions: {
-      d1Databases: ['D1_TEST'],
-      globals: { KEY: 'value' },
+      // d1Databases: ['D1_TEST'],
+      // globals: { KEY: 'value' },
     },
   },
 })
