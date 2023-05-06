@@ -14,7 +14,7 @@ test('test 1', async () => {
   // miniflare が定義している D1Database と
   // @cloudflare/workers-types/2022 - 11 - 30 が定義している D1Database の型が異なる
   // そのためそもそも D1 を渡そうとするとエラーになる
-  // なので D1Database 型に無理矢理変換している
+  // なので @cloudflare/workers-types の D1Database 型に無理矢理変換している
   const D1 = new miniflareD1Database(new D1DatabaseAPI(sqliteDb)) as D1Database
 
   // TODO: ここは本来 db/schema.sql ファイル読み込むようにする
