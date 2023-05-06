@@ -4,8 +4,8 @@
     {
       "name": "typescript-d1",
       "wasm": {
-        "url": "file://.sqlc-plugin/sqlc-gen-typescript-d1.wasm",
-        "sha256": "57f7a43184520d90dfdae6cafe9533b967152222da3f2a9044d60db3f359ec09"
+        "url": "https://github.com/orisano/sqlc-gen-typescript-d1/releases/download/v0.0.0-a/sqlc-gen-typescript-d1.wasm",
+        "sha256": "0ebd153df7ad6e017201eb50a2c096eb8add1251a483d6aae865cd873b1e961c"
       }
     }
   ],
