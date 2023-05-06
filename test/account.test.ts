@@ -8,7 +8,7 @@ import { expect, test } from 'vitest'
 import { createSQLiteDB } from '@miniflare/shared'
 import { D1Database as miniflareD1Database, D1DatabaseAPI } from '@miniflare/d1'
 
-test('test 1', async () => {
+test('account', async () => {
   const sqliteDb = await createSQLiteDB(':memory:')
   // sqlc で生成したコードを使いたいが D1Database の型がマッチしない問題がある
   // miniflare が定義している D1Database と @cloudflare/workers-types が定義している D1Database の型が異なる
