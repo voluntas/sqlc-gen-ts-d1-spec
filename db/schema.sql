@@ -23,6 +23,6 @@ CREATE TABLE account_log (
   pk INTEGER PRIMARY KEY AUTOINCREMENT,
   tag TEXT NOT NULL,
   time TEXT DEFAULT CURRENT_TIMESTAMP,
-  -- JSON 型は非対応、ただし TEXT に対して JSON クエリー利用可能
+  -- TEXT に対して JSON クエリー利用可能
   data TEXT NOT NULL
 )
