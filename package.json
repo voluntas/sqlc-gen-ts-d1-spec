@@ -11,6 +11,8 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230628.0",
+    "@miniflare/d1": "^2.14.0",
+    "@miniflare/shared": "^2.14.0",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "eslint": "^8.44.0",
