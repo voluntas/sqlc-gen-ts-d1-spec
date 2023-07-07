@@ -11,7 +11,7 @@ import { D1Database as miniflareD1Database, D1DatabaseAPI } from '@miniflare/d1'
 test('account', async () => {
   const sqliteDb = await createSQLiteDB(':memory:')
   // sqlc で生成したコードを使いたいが D1Database の型がマッチしない問題がある
-  // miniflare が定義している D1Database と @cloudflare/workers-types が定義している D1Database の型が異なる
+  // miniflare が定義している miniflareD1Database と @cloudflare/workers-types が定義している D1Database の型が異なる
   // そのため D1 を渡そうとするとエラーになる
   // 解決策として @cloudflare/workers-types の D1Database 型に無理矢理変換している
   const D1 = new miniflareD1Database(new D1DatabaseAPI(sqliteDb)) as D1Database

@@ -1,8 +1,8 @@
-# Cloudflare D1 向けの sqlc plugin (Wasm) の設計仕様
+# Cloudflare D1 向けの sqlc plugin (Wasm) の設計仕様とテスト
 
 ## 概要
 
-このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様と実装のテストを公開しています。
+このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様とテストを公開しています。
 
 ## 実装
 
