@@ -10,38 +10,6 @@
 
 [Community projects · Cloudflare D1 docs](https://developers.cloudflare.com/d1/platform/community-projects/) に登録したい。
 
-## バグっぽいやつ
-
-`first()` は `T` または `null` を返す。今は `<T | null>` を渡しているが、
-本来は fist の中身が `<T | null>` になっていて `<T>` だけでいいはず。
-
-https://github.com/cloudflare/workerd/blob/main/types/defines/d1.d.ts#L17
-
-`@miniflare/d1` だと `first()` は `Promise<T | null>` になってるが、
-@cloudflare/workers-types だと `Promise<T>` になってる。
-
-以下は `@miniflare/d1` の型定義。
-
-```
-export declare class D1PreparedStatement {
-    readonly statement: string;
-    private readonly database;
-    params: any[];
-    constructor(database: D1Database, statement: string, values?: any);
-    bind(...values: any[]): D1PreparedStatement;
-    first<T = unknown>(colName?: string): Promise<T | null>;
-    run<T = unknown>(): Promise<D1Result<T>>;
-    all<T = unknown>(): Promise<D1Result<T>>;
-    raw<T = unknown>(): Promise<T[]>;
-}
-```
-
-バグなのかわからないが報告だけした。
-https://github.com/cloudflare/workerd/issues/614
-
-修正されてた。
-[Tweaked types further and updated d1\.d\.ts to match · cloudflare/workerd@e0d9b9f](https://github.com/cloudflare/workerd/commit/e0d9b9f165bc5ab051d307c682a9303f2372cb79)
-
 ## 自動生成されたコード
 
 - https://github.com/voluntas/sqlc-gen-ts-d1-test/blob/main/sqlc.json
