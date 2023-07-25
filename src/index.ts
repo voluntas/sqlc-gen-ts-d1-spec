@@ -7,7 +7,7 @@ export interface Env {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     try {
-      const result = await db.createOrg(env.D1_TEST, {
+      await db.createOrg(env.D1_TEST, {
         id: 'example',
         displayName: 'Example Inc.',
       })
@@ -16,7 +16,7 @@ export default {
     }
 
     try {
-      const result = await db.createAccount(env.D1_TEST, {
+      await db.createAccount(env.D1_TEST, {
         id: 'voluntas',
         displayName: 'V',
         email: 'v@example.com',
@@ -26,7 +26,7 @@ export default {
     }
 
     try {
-      const result = await db.createOrgAccount(env.D1_TEST, {
+      await db.createOrgAccount(env.D1_TEST, {
         orgPk: 1,
         accountPk: 1,
       })
@@ -60,7 +60,7 @@ export default {
     const r3 = await env.D1_TEST.prepare('SELECT * FROM account_log;').all()
     console.log('ListAccountLogs: ', r3)
 
-    const result = await db.listAccounts(env.D1_TEST)
+    await db.listAccounts(env.D1_TEST)
 
     const account = await db.getAccount(env.D1_TEST, {
       id: 'voluntas',

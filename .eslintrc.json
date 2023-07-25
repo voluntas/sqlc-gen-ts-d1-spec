@@ -12,8 +12,6 @@
   },
   "extends": [
     "eslint:recommended",
-    "@remix-run/eslint-config",
-    "@remix-run/eslint-config/node",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "prettier"

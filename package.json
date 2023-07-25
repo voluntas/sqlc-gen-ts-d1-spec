@@ -7,7 +7,7 @@
     "d1-local-import": "wrangler d1 execute D1_TEST --local --file=db/schema.sql",
     "d1-import": "wrangler d1 execute D1_TEST --file=db/schema.sql",
     "test": "vitest --watch false",
-    "fmt": "prettier --write '**/*.{ts,mts,js,mjs,cjs,html,css,json,md}'"
+    "fmt": "eslint --cache --fix --ext .ts,.tsx src/ && prettier --write src/"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20230717.1",
