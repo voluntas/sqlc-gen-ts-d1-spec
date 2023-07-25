@@ -32,7 +32,7 @@
 ## TODO
 
 - Makefile で sqlc generate を実行する仕組み
-- vitest で sqlc 経由で生成したコードのテスト
+- [x] vitest で sqlc 経由で生成したコードのテスト
 - D1 が対応したら tx のテスト
 - batch の仕様
 
