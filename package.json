@@ -27,7 +27,7 @@
     "vitest-environment-miniflare": "2.14.0",
     "wrangler": "3.3.0"
   },
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@8.6.10",
   "engines": {
     "node": ">=20.0"
   }
