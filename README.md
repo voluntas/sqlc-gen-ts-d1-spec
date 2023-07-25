@@ -4,7 +4,7 @@
 
 このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様を公開しています。
 
-実際の実装である [orisano/sqlc\-gen\-typescript\-d1](https://github.com/orisano/sqlc-gen-typescript-d1) を利用したテストも用意しています。 
+実際の実装である [orisano/sqlc\-gen\-ts\-d1](https://github.com/orisano/sqlc-gen-ts-d1) を利用したテストも用意しています。 
 
 ## 自動生成されたコード
 
