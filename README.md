@@ -1,4 +1,4 @@
-# Cloudflare D1 向けの sqlc plugin (Wasm) の設計仕様
+# Cloudflare D1 向けの sqlc plugin (Wasm) の仕様
 
 ## 概要
 
