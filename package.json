@@ -10,19 +10,19 @@
     "fmt": "prettier --write '**/*.{ts,mts,js,mjs,cjs,html,css,json,md}'"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230710.1",
+    "@cloudflare/workers-types": "^4.20230717.1",
     "@miniflare/d1": "^2.14.0",
     "@miniflare/shared": "^2.14.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
-    "miniflare": "^3.20230710.0",
+    "miniflare": "^3.20230717.0",
     "prettier": "^2.8.8",
     "typescript": "^5.1.6",
     "vitest": "^0.33.0",
     "vitest-environment-miniflare": "^2.14.0",
-    "wrangler": "^3.2.0"
+    "wrangler": "^3.3.0"
   },
   "packageManager": "pnpm@8.6.6",
   "engines": {
