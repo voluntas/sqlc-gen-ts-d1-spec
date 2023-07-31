@@ -4,12 +4,12 @@
 
 このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様を公開しています。
 
-実際の実装である [orisano/sqlc\-gen\-ts\-d1](https://github.com/orisano/sqlc-gen-ts-d1) を利用したテストも用意しています。 
+実際の実装である [orisano/sqlc\-gen\-ts\-d1](https://github.com/orisano/sqlc-gen-ts-d1) を利用したテストも用意しています。
 
 ## 自動生成されたコード
 
-- https://github.com/voluntas/sqlc-gen-ts-d1-test/blob/main/sqlc.json
-- https://github.com/voluntas/sqlc-gen-ts-d1-test/blob/main/src/gen/sqlc/querier.ts
+- https://github.com/voluntas/sqlc-gen-ts-d1-spec/blob/main/sqlc.json
+- https://github.com/voluntas/sqlc-gen-ts-d1-spec/blob/main/src/gen/sqlc/querier.ts
 
 ## モチベーション
 
@@ -58,7 +58,7 @@ https://developers.cloudflare.com/d1/platform/client-api/#type-conversion
 
 ## 参考資料
 
-- https://github.com/kyleconroy/sqlc/issues/296#issuecomment-1250407683
+- https://github.com/sqlc-dev/sqlc/issues/296#issuecomment-1250407683
   - sqlc 作者による typescript-pg 向け sqlc のイメージコード
 - https://github.com/tabbed/sqlc-gen-node-pg
   - Rust (wasm) で書かれてる
@@ -206,26 +206,20 @@ WHERE
   - LIMIT 1; 付ける癖を付けるのが無難か
 - [x] many の場合は all() で良さそう
 - [x] exec の場合は run() で良さそう
-- batch をどうするか
-  - D1.batch があるので実現は可能そう
+- db.batch をどうするか
+  - 特になにもせず `D1.batch([D1.createAccount(...), D1.createAccount(...)])` でよさそう
 
 ## 利用例
 
 ```console
-$ git clone git@github.com:orisano/sqlc.git
-$ cd sqlc
-$ make sqlc-dev
-```
-
-```console
-$ git git@github.com:orisano/sqlc-gen-typescript-d1.git
+$ git git@github.com:orisano/sqlc-gen-ts-d1.git
 $ cd sqlc-gen-typescript-d1
 $ make
 ```
 
 ```console
-$ cp ~/sqlc-gen-typescript-d1/bin/sqlc-gen-typescript-d1.wasm ~/sqlc-gen-typescript-d1-test/.sqlc-plugin/sqlc-gen-typescript-d1.wasm
-$ cat sqlc-gen-typescript-d1.wasm.sha256
+$ cp ~/sqlc-gen-ts-d1/bin/sqlc-gen-ts-d1.wasm ~/sqlc-gen-ts-d1-spec/.sqlc-plugin/sqlc-gen-ts-d1.wasm
+$ cat sqlc-gen-ts-d1.wasm.sha256
 $ ~/bin/sqlc-dev generate
 ```
 
@@ -255,6 +249,16 @@ export default {
       // console.log(error)
     }
 
+    // results は D1Result<T>[] になる
+    const results = await env.D1_TEST.batch([
+      db.createAccount(env.D1_TEST, {}),
+      db.createAccount(env.D1_TEST, {})
+    ])
+    //
+    console.log(results[0].success)
+    console.log(results[1].success)
+
+
     // 存在しない場合は [] が戻ってくるはず
     const result = await db.listAccounts(env.D1_TEST)
     console.log(result)
@@ -283,11 +287,10 @@ export default {
   "version": "2",
   "plugins": [
     {
-      "name": "typescript-d1",
+      "name": "ts-d1",
       "wasm": {
-        // Cloudflare R2 で配信
-        "url": "https://sqlc.shiguredo.app/latest/sqlc-gen-typescript-d1.wasm",
-        "sha256": "4762fc11c845ea57a0dda3675a58c8c74ed979a102c5c5a4cc2c505208060cf6"
+        "url": "https://github.com/orisano/sqlc-gen-ts-d1/releases/download/v0.0.0-a/sqlc-gen-ts-d1.wasm",
+        "sha256": "77503e225c4bafdf000fa9856ccb582e6bce6e3dad134576ec4dbccf2716bc06"
       }
     }
   ],
@@ -299,8 +302,8 @@ export default {
       "codegen": [
         {
           "out": "src/gen/sqlc",
-          "plugin": "typescript-d1",
-          "options": "workers-types-v3=1"
+          "plugin": "ts-d1",
+          "options": "workers-types=experimental"
         }
       ]
     }
@@ -310,9 +313,7 @@ export default {
 
 ### options
 
-- workers-types-v3=1 で @cloudflare/workers-types の v3 が利用できる
-  - v3 自体は廃止されていき、今後は v4 になる流れ
-  - v4 のバージョンももしかすると細かく指定できた方がいいのか？
+workers-types=experimental で @cloudflare/workers-types の最新が利用できる。
 
 ### null の扱い
 
@@ -323,62 +324,35 @@ export default {
 
 ## D1 の型
 
-3 系と 4 系で異なるので要注意。
-
-### 3 系
-
-https://github.com/cloudflare/workers-types/blob/v3.19.0/index.d.ts#L219-L240
-
-```typescript
-interface D1Database {
-  prepare(query: string): D1PreparedStatement
-  dump(): Promise<ArrayBuffer>
-  batch<T = unknown>(statements: D1PreparedStatement[]): Promise<D1Result<T>[]>
-  exec<T = unknown>(query: string): Promise<D1Result<T>>
-}
-
-interface D1PreparedStatement {
-  bind(...values: any[]): D1PreparedStatement
-  first<T = unknown>(colName?: string): Promise<T>
-  run<T = unknown>(): Promise<D1Result<T>>
-  all<T = unknown>(): Promise<D1Result<T>>
-  raw<T = unknown>(): Promise<T[]>
-}
-
-declare type D1Result<T = unknown> = {
-  results?: T[]
-  lastRowId: number | null
-  changes: number
-  duration: number
-  error?: string
-}
-```
-
-### 4 系
-
 https://github.com/cloudflare/workerd/blob/main/types/defines/d1.d.ts
 
 ```typescript
 interface D1Result<T = unknown> {
-  results?: T[]
-  success: boolean
-  error?: string
+  results: T[]
+  success: true
   meta: any
+  error?: never
+}
+
+interface D1ExecResult {
+  count: number
+  duration: number
 }
 
 declare abstract class D1Database {
   prepare(query: string): D1PreparedStatement
   dump(): Promise<ArrayBuffer>
   batch<T = unknown>(statements: D1PreparedStatement[]): Promise<D1Result<T>[]>
-  exec<T = unknown>(query: string): Promise<D1Result<T>>
+  exec(query: string): Promise<D1ExecResult>
 }
 
 declare abstract class D1PreparedStatement {
-  bind(...values: any[]): D1PreparedStatement
-  first<T = unknown>(colName?: string): Promise<T>
-  run<T = unknown>(): Promise<D1Result<T>>
-  all<T = unknown>(): Promise<D1Result<T>>
-  raw<T = unknown>(): Promise<T[]>
+  bind(...values: unknown[]): D1PreparedStatement
+  first<T = unknown>(colName: string): Promise<T | null>
+  first<T = Record<string, unknown>>(): Promise<T | null>
+  run<T = Record<string, unknown>>(): Promise<D1Result<T>>
+  all<T = Record<string, unknown>>(): Promise<D1Result<T>>
+  raw<T = unknown[]>(): Promise<T[]>
 }
 ```
 
