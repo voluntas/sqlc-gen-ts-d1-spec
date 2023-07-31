@@ -1,14 +1,10 @@
-# Cloudflare D1 向けの sqlc plugin (Wasm) の設計仕様とテスト
+# Cloudflare D1 向けの sqlc plugin (Wasm) の仕様
 
 ## 概要
 
-このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様とテストを公開しています。
+このリポジトリは Cloudflare D1 で sqlc で利用するための設計仕様を公開しています。
 
-## 実装
-
-[orisano/sqlc\-gen\-typescript\-d1](https://github.com/orisano/sqlc-gen-typescript-d1)
-
-[Community projects · Cloudflare D1 docs](https://developers.cloudflare.com/d1/platform/community-projects/) に登録したい。
+実際の実装である [orisano/sqlc\-gen\-ts\-d1](https://github.com/orisano/sqlc-gen-ts-d1) を利用したテストも用意しています。 
 
 ## 自動生成されたコード
 
@@ -31,10 +27,12 @@
 
 ## TODO
 
-- Cloudflare Pages + Remix のサンプル
+- [x] Cloudflare Pages + Remix のサンプル
+  - pages がちょっと融通が利かなすぎてツライので pages は諦めた
 - Makefile で sqlc generate を実行する仕組み
 - D1 が対応したら tx のテスト
 - batch の仕様
+- [Community projects · Cloudflare D1 docs](https://developers.cloudflare.com/d1/platform/community-projects/) に登録したい。
 
 ## D1 の挙動
 

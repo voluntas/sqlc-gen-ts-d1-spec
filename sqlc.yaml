@@ -2,8 +2,8 @@ version: "2"
 plugins:
   - name: ts-d1
     wasm:
-      url: "https://github.com/orisano/sqlc-gen-typescript-d1/releases/download/v0.0.0-a/sqlc-gen-ts-d1.wasm"
-      sha256: "62916912317f2126c2b45fcd78858b159765a2274d244e9709dca5c098822a30"
+      url: "https://github.com/orisano/sqlc-gen-ts-d1/releases/download/v0.0.0-a/sqlc-gen-ts-d1.wasm"
+      sha256: "16b43a9fe718522e4dda27dc64f73a854d0bbed1ef59e548c220d301300b4a87"
 sql:
   - schema: db/schema.sql
     queries: db/query/
@@ -11,4 +11,4 @@ sql:
     codegen:
       - out: src/gen/sqlc
         plugin: ts-d1
-        options: workers-types-v4=experimental
+        options: workers-types=experimental
