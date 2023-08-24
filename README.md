@@ -60,9 +60,6 @@ https://developers.cloudflare.com/d1/platform/client-api/#type-conversion
 
 - https://github.com/sqlc-dev/sqlc/issues/296#issuecomment-1250407683
   - sqlc 作者による typescript-pg 向け sqlc のイメージコード
-- https://github.com/tabbed/sqlc-gen-node-pg
-  - Rust (wasm) で書かれてる
-  - sqlc 作者による node-pg 向けの sqlc plugin のコード
 - https://github.com/tabbed/sqlc-gen-python
   - Go (wasm) で書かれている
   - sqlc 作者による python-pg 向けの sqlc plugin のコード
