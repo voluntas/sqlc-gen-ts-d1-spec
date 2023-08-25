@@ -76,54 +76,34 @@ https://developers.cloudflare.com/d1/platform/client-api/#type-conversion
 ### schema.sql
 
 ```sql
--- name: GetAccount :one
-SELECT *
-FROM account
-WHERE id = @id;
+CREATE TABLE org (
+  pk INTEGER PRIMARY KEY,
+  id TEXT UNIQUE NOT NULL,
+  display_name TEXT NOT NULL
+);
 
--- name: ListAccounts :many
-SELECT *
-FROM account;
+CREATE TABLE account (
+  pk INTEGER PRIMARY KEY,
+  id TEXT UNIQUE NOT NULL,
+  display_name TEXT NOT NULL,
+  email TEXT
+);
 
--- name: CreateAccount :exec
-INSERT INTO account (id, display_name, email)
-VALUES (@id, @display_name, @email);
+CREATE TABLE org_account (
+  org_pk INTEGER NOT NULL,
+  account_pk INTEGER NOT NULL,
+  PRIMARY KEY (org_pk, account_pk),
+  FOREIGN KEY (org_pk) REFERENCES org (pk) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (account_pk) REFERENCES account (pk) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
--- name: UpdateAccountDisplayName :one
-UPDATE account
-SET display_name = @display_name
-WHERE id = @id
-RETURNING *;
-
--- name: DeleteAccount :exec
-DELETE FROM account
-WHERE id = @id;
-
--- name: CreateOrg :exec
-INSERT INTO org (id, display_name)
-VALUES (@id, @display_name);
-
--- name: CreateOrgAccount :exec
-INSERT INTO org_account (org_pk, account_pk)
-VALUES (@org_pk, @account_pk);
-
--- name: GetOrgAccount :one
-SELECT
-  account.pk AS account_pk,
-  account.id AS account_id,
-  account.display_name AS account_display_name,
-  account.email AS account_email,
-  org.pk AS org_pk,
-  org.id AS org_id,
-  org.display_name AS org_display_name
-FROM
-  account
-JOIN
-  org_account ON account.pk = org_account.account_pk
-JOIN
-  org ON org_account.org_pk = org.pk
-WHERE
-  org.id = @org_id AND account.id = @account_id;
+CREATE TABLE account_log (
+  pk INTEGER PRIMARY KEY,
+  tag TEXT NOT NULL,
+  time TEXT DEFAULT CURRENT_TIMESTAMP,
+  -- TEXT に対して JSON クエリー利用可能
+  data TEXT NOT NULL
+)
 ```
 
 ### query.sql
