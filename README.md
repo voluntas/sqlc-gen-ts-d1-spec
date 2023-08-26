@@ -184,7 +184,9 @@ WHERE
 - [x] many の場合は all() で良さそう
 - [x] exec の場合は run() で良さそう
 - db.batch をどうするか
-  - 特になにもせず `D1.batch([D1.createAccount(...), D1.createAccount(...)])` でよさそう
+  - `D1.batch([D1.createAccount(...).batch(), D1.createAccount(...).batch()])` でよさそう?
+  - batch() が呼ばれたら run しないみたいなのがあるとよさそう？
+  - 名前が安直かも知れない
 
 ## 利用例
 
@@ -227,9 +229,10 @@ export default {
     }
 
     // results は D1Result<T>[] になる
+    // TODO: これはまだ検討中
     const results = await env.D1_TEST.batch([
-      db.createAccount(env.D1_TEST, {}),
-      db.createAccount(env.D1_TEST, {})
+      db.createAccount(env.D1_TEST, {}).batch(),
+      db.createAccount(env.D1_TEST, {}).batch()
     ])
     //
     console.log(results[0].success)
