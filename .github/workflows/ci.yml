@@ -7,6 +7,8 @@ on:
     paths-ignore:
       - "**.md"
       - "LICENSE"
+    branches-ignore:
+      - "feature/batch"
 jobs:
   ci:
     runs-on: ubuntu-latest

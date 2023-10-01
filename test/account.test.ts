@@ -46,4 +46,12 @@ test('account', async () => {
   })
   expect(a2).not.toBeNull()
   expect(a2?.displayName).toBe('Test2')
+
+  const r3 = await D1.batch([
+    db.deleteAccount(D1, { id: 'test' }).batch(),
+    db.createAccount(D1, { id: 'test', displayName: 'Test', email: 'test@example.com' }).batch(),
+  ])
+
+  expect(r3[0].success).toBe(true)
+  expect(r3[1].success).toBe(true)
 })
