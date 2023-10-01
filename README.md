@@ -229,10 +229,19 @@ export default {
     }
 
     // results は D1Result<T>[] になる
-    // TODO: これはまだ検討中
+    // TODO: これはまだ実験的
     const results = await env.D1_TEST.batch([
-      db.createAccount(env.D1_TEST, {}).batch(),
-      db.createAccount(env.D1_TEST, {}).batch()
+      // batch の中で呼ぶ場合は batch() を呼ぶようにする
+      db.createAccount(env.D1_TEST, {
+          id: 'voluntas2',
+          displayName: 'V2',
+          email: 'v2@example.com'
+        }).batch(),
+      db.createAccount(env.D1_TEST, {
+          id: 'voluntas3',
+          displayName: 'V3',
+          email: 'v3@example.com'
+        }).batch()
     ])
     //
     console.log(results[0].success)
