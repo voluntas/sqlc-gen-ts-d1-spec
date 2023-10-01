@@ -16,7 +16,7 @@ jobs:
       - run: go version
       - uses: sqlc-dev/setup-sqlc@v3
         with:
-          sqlc-version: '1.20.0'
+          sqlc-version: '1.22.0'
       - run: sqlc version
       - run: sqlc generate
       - uses: actions/setup-node@v3
