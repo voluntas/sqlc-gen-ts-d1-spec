@@ -7,6 +7,6 @@
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "types": ["@cloudflare/workers-types", "vitest-environment-miniflare/globals"]
+    "types": ["@cloudflare/workers-types/experimental", "vitest-environment-miniflare/globals"]
   }
 }

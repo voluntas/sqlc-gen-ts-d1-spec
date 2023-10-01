@@ -1,4 +1,4 @@
-import { D1Database } from '@cloudflare/workers-types/2022-11-30'
+import { D1Database } from '@cloudflare/workers-types/experimental'
 import * as db from '../src/gen/sqlc/querier'
 
 import { expect, test } from 'vitest'
