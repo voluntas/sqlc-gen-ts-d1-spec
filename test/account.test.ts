@@ -2,8 +2,6 @@ import { D1Database } from '@cloudflare/workers-types/experimental'
 import * as db from '../src/gen/sqlc/querier'
 
 import { expect, test } from 'vitest'
-// const describe = setupMiniflareIsolatedStorage()
-// const { D1_TEST } = getMiniflareBindings()
 
 import { createSQLiteDB } from '@miniflare/shared'
 import { D1Database as miniflareD1Database, D1DatabaseAPI } from '@miniflare/d1'
