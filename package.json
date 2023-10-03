@@ -10,11 +10,11 @@
     "fmt": "eslint --cache --fix --ext .ts,.tsx src/ && prettier --write src/"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20230922.0",
+    "@cloudflare/workers-types": "4.20231002.0",
     "@miniflare/d1": "2.14.1",
     "@miniflare/shared": "2.14.1",
-    "@typescript-eslint/eslint-plugin": "6.7.3",
-    "@typescript-eslint/parser": "6.7.3",
+    "@typescript-eslint/eslint-plugin": "6.7.4",
+    "@typescript-eslint/parser": "6.7.4",
     "@vitest/coverage-v8": "0.34.6",
     "better-sqlite3": "8.7.0",
     "eslint": "8.50.0",
