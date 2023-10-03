@@ -1,4 +1,4 @@
-name = "sqlc-gen-ts-d1-test"
+name = "sqlc-gen-ts-d1-spec"
 
 main = "src/index.ts"
 
