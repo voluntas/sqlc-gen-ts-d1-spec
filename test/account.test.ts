@@ -3,6 +3,8 @@ import * as db from '../src/gen/sqlc/querier'
 
 import { expect, test } from 'vitest'
 
+// shared と d1 は miniflare v2 の遺産なので、そのうち使えなくなる
+// miniflare v3 側テスト用のライブラリを用意してくれるまで焦らずまつしかない
 import { createSQLiteDB } from '@miniflare/shared'
 import { D1Database as miniflareD1Database, D1DatabaseAPI } from '@miniflare/d1'
 
