@@ -17,31 +17,14 @@
 - Cloudflare D1 向けの sqlc が欲しい
 - D1 は SQL をそのまま書くので避けたい
 - D1 の SQLite3 ベースなので sqlc の SQLite3 がそのまま使えるはず
-- sqlc の plugin 機能を使いたい
-  - sqlc の plugin 機能は Wasm
-  - Go で Wasm を出力したモノを使いたい
-- sqlc TypeScript で SQLite3 版も欲しい
-  - sqlite3 の Wasm が公式から提供されている
-- Electron で SQLite3 を使うときにも使いたい
-- sqlc と vitest でテストを書きたい
+- D1 利用時に sqlc と vitest でテストを書きたい
 
 ## TODO
 
-- [x] Cloudflare Pages + Remix のサンプル
-  - pages がちょっと融通が利かなすぎてツライので pages は諦めた
 - Makefile で sqlc generate を実行する仕組み
 - D1 が対応したら tx のテスト
-- batch の仕様
-- [Community projects · Cloudflare D1 docs](https://developers.cloudflare.com/d1/platform/community-projects/) に登録したい。
 
 ## D1 の挙動
-
-### JSON 型と object についての調査
-
-- JSON 型は定義はできる
-- 内部では文字列型として扱われているっぽい
-- INSERT するときも文字列化が必要
-- SELECT するときも文字列から JSON に変換する必要がある
 
 ### .\* を利用したときの挙動
 
@@ -183,24 +166,10 @@ WHERE
   - LIMIT 1; 付ける癖を付けるのが無難か
 - [x] many の場合は all() で良さそう
 - [x] exec の場合は run() で良さそう
-- db.batch をどうするか
-  - `D1.batch([D1.createAccount(...).batch(), D1.createAccount(...).batch()])` でよさそう?
-  - batch() が呼ばれたら run しないみたいなのがあるとよさそう？
-  - 名前が安直かも知れない
+- db.batch([..., ])
+  - `D1.batch([D1.createAccount(...).batch(), D1.createAccount(...).batch()])` 仮決め
 
 ## 利用例
-
-```console
-$ git git@github.com:orisano/sqlc-gen-ts-d1.git
-$ cd sqlc-gen-typescript-d1
-$ make
-```
-
-```console
-$ cp ~/sqlc-gen-ts-d1/bin/sqlc-gen-ts-d1.wasm ~/sqlc-gen-ts-d1-spec/.sqlc-plugin/sqlc-gen-ts-d1.wasm
-$ cat sqlc-gen-ts-d1.wasm.sha256
-$ ~/bin/sqlc-dev generate
-```
 
 ```console
 $ pnpm install
@@ -279,7 +248,7 @@ export default {
       "name": "ts-d1",
       "wasm": {
         "url": "https://github.com/orisano/sqlc-gen-ts-d1/releases/download/v0.0.0-a/sqlc-gen-ts-d1.wasm",
-        "sha256": "77503e225c4bafdf000fa9856ccb582e6bce6e3dad134576ec4dbccf2716bc06"
+        "sha256": "$(curl -sSL https://github.com/orisano/sqlc-gen-ts-d1/releases/download/v0.0.0-a/sqlc-gen-ts-d1.wasm.sha256)"
       }
     }
   ],
@@ -317,31 +286,31 @@ https://github.com/cloudflare/workerd/blob/main/types/defines/d1.d.ts
 
 ```typescript
 interface D1Result<T = unknown> {
-  results: T[];
-  success: true;
-  meta: any;
-  error?: never;
+  results: T[]
+  success: true
+  meta: any
+  error?: never
 }
 
 interface D1ExecResult {
-  count: number;
-  duration: number;
+  count: number
+  duration: number
 }
 
 declare abstract class D1Database {
-  prepare(query: string): D1PreparedStatement;
-  dump(): Promise<ArrayBuffer>;
-  batch<T = unknown>(statements: D1PreparedStatement[]): Promise<D1Result<T>[]>;
-  exec(query: string): Promise<D1ExecResult>;
+  prepare(query: string): D1PreparedStatement
+  dump(): Promise<ArrayBuffer>
+  batch<T = unknown>(statements: D1PreparedStatement[]): Promise<D1Result<T>[]>
+  exec(query: string): Promise<D1ExecResult>
 }
 
 declare abstract class D1PreparedStatement {
-  bind(...values: unknown[]): D1PreparedStatement;
-  first<T = unknown>(colName: string): Promise<T | null>;
-  first<T = Record<string, unknown>>(): Promise<T | null>;
-  run<T = Record<string, unknown>>(): Promise<D1Result<T>>;
-  all<T = Record<string, unknown>>(): Promise<D1Result<T>>;
-  raw<T = unknown[]>(): Promise<T[]>;
+  bind(...values: unknown[]): D1PreparedStatement
+  first<T = unknown>(colName: string): Promise<T | null>
+  first<T = Record<string, unknown>>(): Promise<T | null>
+  run<T = Record<string, unknown>>(): Promise<D1Result<T>>
+  all<T = Record<string, unknown>>(): Promise<D1Result<T>>
+  raw<T = unknown[]>(): Promise<T[]>
 }
 ```
 
