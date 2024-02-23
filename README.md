@@ -41,14 +41,8 @@ https://developers.cloudflare.com/d1/platform/client-api/#type-conversion
 
 ## 参考資料
 
-- https://github.com/sqlc-dev/sqlc/issues/296#issuecomment-1250407683
-  - sqlc 作者による typescript-pg 向け sqlc のイメージコード
-- https://github.com/tabbed/sqlc-gen-python
-  - Go (wasm) で書かれている
-  - sqlc 作者による python-pg 向けの sqlc plugin のコード
-- https://github.com/tabbed/sqlc-gen-kotlin
-  - Go (wasm) で書かれている
-  - sqlc 作者による kotlin-pg 向けの sqlc plugin のコード
+- https://github.com/sqlc-dev/sqlc-gen-typescript
+- https://github.com/sqlc-dev/sqlc-gen-python
 - [Cloudflare D1 を type\-safe で O/R マッパーぽく使用できるようにする](https://zenn.dev/chimame/articles/23aafcc2e70f33)
   - sqldef を使ってるらしいので、 sqlc と sqldef 組み合わせたい
 - https://miniflare.dev/testing/vitest
@@ -319,7 +313,7 @@ declare abstract class D1PreparedStatement {
 Apache License 2.0
 
 ```
-Copyright 2023-2023, @voluntas
+Copyright 2023-2024, @voluntas
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
