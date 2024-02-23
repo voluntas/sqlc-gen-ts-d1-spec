@@ -3,7 +3,7 @@ plugins:
   - name: ts-d1
     wasm:
       url: "https://github.com/orisano/sqlc-gen-ts-d1/releases/download/v0.0.0-a/sqlc-gen-ts-d1.wasm"
-      sha256: "f3f1bc3a513991b365eddc9850473afec39e91a61852487987f24cfcdc9d381d"
+      sha256: "5663d287bfb2297a3d62286a1c59e21b42a39884f252829ea86d502fcebe94ef"
 sql:
   - schema: db/schema.sql
     queries: db/query/
