@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
       - run: go version
-      - uses: sqlc-dev/setup-sqlc@v3
+      - uses: sqlc-dev/setup-sqlc@v4
         with:
           sqlc-version: "1.25.0"
       - run: sqlc version
       - run: sqlc generate
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
         with:
           version: 8
       - run: pnpm install
