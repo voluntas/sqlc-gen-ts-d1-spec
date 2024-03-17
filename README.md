@@ -21,6 +21,8 @@
 
 ## TODO
 
+- [ ] `options` が `workers-types=experimental` になっているので ``options: workers-types: experimental` のようにしていできる必要がある
+  - `sqlc-2.0.json` では options は object になっている
 - Makefile で sqlc generate を実行する仕組み
 - D1 が対応したら tx のテスト
 
@@ -172,21 +174,25 @@ $ pnpm run dev
 ```
 
 ```js
-import * as db from './gen/sqlc/querier'
+import * as db from "./gen/sqlc/querier";
 
 export interface Env {
   D1_TEST: D1Database;
 }
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext
+  ): Promise<Response> {
     try {
       // すでに作られている場合は例外が上がるのでキャッチ
       const result = await db.createAccount(env.D1_TEST, {
-        id: 'voluntas',
-        displayName: 'V',
-        email: 'v@example.com',
-      })
+        id: "voluntas",
+        displayName: "V",
+        email: "v@example.com",
+      });
     } catch (error) {
       // console.log(error)
     }
@@ -195,41 +201,44 @@ export default {
     // TODO: これはまだ実験的
     const results = await env.D1_TEST.batch([
       // batch の中で呼ぶ場合は batch() を呼ぶようにする
-      db.createAccount(env.D1_TEST, {
-          id: 'voluntas2',
-          displayName: 'V2',
-          email: 'v2@example.com'
-        }).batch(),
-      db.createAccount(env.D1_TEST, {
-          id: 'voluntas3',
-          displayName: 'V3',
-          email: 'v3@example.com'
-        }).batch()
-    ])
+      db
+        .createAccount(env.D1_TEST, {
+          id: "voluntas2",
+          displayName: "V2",
+          email: "v2@example.com",
+        })
+        .batch(),
+      db
+        .createAccount(env.D1_TEST, {
+          id: "voluntas3",
+          displayName: "V3",
+          email: "v3@example.com",
+        })
+        .batch(),
+    ]);
     //
-    console.log(results[0].success)
-    console.log(results[1].success)
-
+    console.log(results[0].success);
+    console.log(results[1].success);
 
     // 存在しない場合は [] が戻ってくるはず
-    const result = await db.listAccounts(env.D1_TEST)
-    console.log(result)
+    const result = await db.listAccounts(env.D1_TEST);
+    console.log(result);
 
     // 存在しない場合は null が戻ってくる、はず
     const account = await db.getAccount(env.D1_TEST, {
-      id: 'voluntas',
-    })
+      id: "voluntas",
+    });
     if (!account) {
-      return new Response('Not Found', { status: 404 })
+      return new Response("Not Found", { status: 404 });
     }
-    console.log(account)
+    console.log(account);
 
     return new Response(JSON.stringify(account), {
       status: 200,
-      headers: { 'content-type': 'application/json' },
-    })
+      headers: { "content-type": "application/json" },
+    });
   },
-}
+};
 ```
 
 ## sqlc.json
@@ -280,31 +289,31 @@ https://github.com/cloudflare/workerd/blob/main/types/defines/d1.d.ts
 
 ```typescript
 interface D1Result<T = unknown> {
-  results: T[]
-  success: true
-  meta: any
-  error?: never
+  results: T[];
+  success: true;
+  meta: any;
+  error?: never;
 }
 
 interface D1ExecResult {
-  count: number
-  duration: number
+  count: number;
+  duration: number;
 }
 
 declare abstract class D1Database {
-  prepare(query: string): D1PreparedStatement
-  dump(): Promise<ArrayBuffer>
-  batch<T = unknown>(statements: D1PreparedStatement[]): Promise<D1Result<T>[]>
-  exec(query: string): Promise<D1ExecResult>
+  prepare(query: string): D1PreparedStatement;
+  dump(): Promise<ArrayBuffer>;
+  batch<T = unknown>(statements: D1PreparedStatement[]): Promise<D1Result<T>[]>;
+  exec(query: string): Promise<D1ExecResult>;
 }
 
 declare abstract class D1PreparedStatement {
-  bind(...values: unknown[]): D1PreparedStatement
-  first<T = unknown>(colName: string): Promise<T | null>
-  first<T = Record<string, unknown>>(): Promise<T | null>
-  run<T = Record<string, unknown>>(): Promise<D1Result<T>>
-  all<T = Record<string, unknown>>(): Promise<D1Result<T>>
-  raw<T = unknown[]>(): Promise<T[]>
+  bind(...values: unknown[]): D1PreparedStatement;
+  first<T = unknown>(colName: string): Promise<T | null>;
+  first<T = Record<string, unknown>>(): Promise<T | null>;
+  run<T = Record<string, unknown>>(): Promise<D1Result<T>>;
+  all<T = Record<string, unknown>>(): Promise<D1Result<T>>;
+  raw<T = unknown[]>(): Promise<T[]>;
 }
 ```
 
