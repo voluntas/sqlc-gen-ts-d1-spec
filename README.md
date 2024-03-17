@@ -23,6 +23,8 @@
 
 - [ ] `options` が `workers-types=experimental` になっているので ``options: workers-types: experimental` のようにしていできる必要がある
   - `sqlc-2.0.json` では options は object になっている
+- [ ] 最新の API 変更に仕様を合わせる
+  - https://developers.cloudflare.com/d1/platform/changelog/
 - Makefile で sqlc generate を実行する仕組み
 - D1 が対応したら tx のテスト
 
@@ -288,12 +290,25 @@ workers-types=experimental で @cloudflare/workers-types の最新が利用で�
 https://github.com/cloudflare/workerd/blob/main/types/defines/d1.d.ts
 
 ```typescript
-interface D1Result<T = unknown> {
-  results: T[];
+interface D1Meta {
+  duration: number;
+  size_after: number;
+  rows_read: number;
+  rows_written: number;
+  last_row_id: number;
+  changed_db: boolean;
+  changes: number;
+}
+
+interface D1Response {
   success: true;
-  meta: any;
+  meta: D1Meta & Record<string, unknown>;
   error?: never;
 }
+
+type D1Result<T = unknown> = D1Response & {
+  results: T[];
+};
 
 interface D1ExecResult {
   count: number;
@@ -311,9 +326,12 @@ declare abstract class D1PreparedStatement {
   bind(...values: unknown[]): D1PreparedStatement;
   first<T = unknown>(colName: string): Promise<T | null>;
   first<T = Record<string, unknown>>(): Promise<T | null>;
-  run<T = Record<string, unknown>>(): Promise<D1Result<T>>;
+  run(): Promise<D1Response>;
   all<T = Record<string, unknown>>(): Promise<D1Result<T>>;
-  raw<T = unknown[]>(): Promise<T[]>;
+  raw<T = unknown[]>(options: {
+    columnNames: true;
+  }): Promise<[string[], ...T[]]>;
+  raw<T = unknown[]>(options?: { columnNames?: false }): Promise<T[]>;
 }
 ```
 
