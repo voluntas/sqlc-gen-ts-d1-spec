@@ -266,7 +266,9 @@ export default {
         {
           "out": "src/gen/sqlc",
           "plugin": "ts-d1",
-          "options": "workers-types=experimental"
+          "options": {
+            "workers-types": "experimental"
+          }
         }
       ]
     }
