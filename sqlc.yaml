@@ -3,7 +3,7 @@ plugins:
   - name: ts-d1
     wasm:
       url: "https://github.com/orisano/sqlc-gen-ts-d1/releases/download/v0.0.0-a/sqlc-gen-ts-d1.wasm"
-      sha256: "5663d287bfb2297a3d62286a1c59e21b42a39884f252829ea86d502fcebe94ef"
+      sha256: "a3d312f03e80d6530ea7be50c1b39cf2e34cfa846d91751973ed078cb2cddecc"
 sql:
   - schema: db/schema.sql
     queries: db/query/
@@ -11,4 +11,5 @@ sql:
     codegen:
       - out: src/gen/sqlc
         plugin: ts-d1
-        options: workers-types=experimental
+        options:
+          workers-types: experimental
