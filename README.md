@@ -279,7 +279,7 @@ export default {
 
 ### options
 
-workers-types=experimental で @cloudflare/workers-types の最新が利用できる。
+`workers-types: experimental` で `@cloudflare/workers-types` の最新が利用できる。
 
 ### null の扱い
 
