@@ -21,10 +21,11 @@
 
 ## TODO
 
-- [ ] `options` が `workers-types=experimental` になっているので ``options: workers-types: experimental` のようにしていできる必要がある
-  - `sqlc-2.0.json` では options は object になっている
 - [ ] 最新の API 変更に仕様を合わせる
   - https://developers.cloudflare.com/d1/platform/changelog/
+- [ ] test/ を miniflare v3 に切り替える
+- [x] `options` が `workers-types=experimental` になっているので ``options: workers-types: experimental` のようにしていできる必要がある
+  - `sqlc-2.0.json` では options は object になっている
 - Makefile で sqlc generate を実行する仕組み
 - D1 が対応したら tx のテスト
 
